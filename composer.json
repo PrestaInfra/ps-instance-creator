@@ -1,0 +1,21 @@
+{
+    "name": "prestainfra/ps-instance-creator",
+    "description": "Prestashop docker instance creator",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Prestainfra\\PsInstanceCreator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "PululuK",
+            "email": "pululuandre@hotmail.com"
+        }
+    ],
+    "require": {
+        "prestainfra/docker-php-api": "7.1.41.x-dev",
+        "prestainfra/docker-php": "v3.0.0"
+    }
+}
