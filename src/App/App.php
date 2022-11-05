@@ -5,14 +5,18 @@ namespace Prestainfra\PsInstanceCreator\App;
 final class App
 {
     protected $dockerClient;
+    protected $templateEngine;
 
-    public function __construct(DockerClientInterface $dockerClient)
-    {
+    public function __construct(
+        DockerClientInterface $dockerClient,
+        TemplateEngineInterface $templateEngine
+    ){
         $this->dockerClient = $dockerClient;
+        $this->templateEngine = $templateEngine;
     }
 
-    public static function renderView(): string
+    public function renderView(): string
     {
-        return '';
+        return $this->templateEngine->render('index.html.twig', []);
     }
 }

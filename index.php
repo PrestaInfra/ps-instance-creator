@@ -4,8 +4,11 @@ require 'config/defines.inc.php';
 require 'vendor/autoload.php';
 
 use Prestainfra\PsInstanceCreator\Adapter\Docker\DockerClient;
+use Prestainfra\PsInstanceCreator\Adapter\Twig\Twig;
 use Prestainfra\PsInstanceCreator\App\App;
 
 $dockerClient = new DockerClient();
-$app = new App($dockerClient);
-$app->renderView();
+$templateEngine = new Twig(_APP_TEMPLATES_DIR_, _APP_CACHE_DIR_);
+$app = new App($dockerClient, $templateEngine);
+
+echo $app->renderView();
