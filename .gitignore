@@ -1,3 +1,5 @@
 vendor/
 cache/
+node_modules/
+assets/build/
 composer.lock
