@@ -17,6 +17,13 @@ final class App
 
     public function renderView(): string
     {
-        return $this->templateEngine->render('index.html.twig', []);
+        return $this->templateEngine->render('index.html.twig', $this->getViewVariables());
+    }
+
+    protected function getViewVariables(): array
+    {
+        return [
+            'assets_dir' => _APP_ASSETS_DIR_
+        ];
     }
 }

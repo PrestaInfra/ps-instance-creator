@@ -13,3 +13,7 @@ if (!defined('_APP_TEMPLATES_DIR_')) {
 if (!defined('_APP_CACHE_DIR_')) {
     define('_APP_CACHE_DIR_', _APP_ROOT_DIR_.'/cache/');
 }
+
+if (!defined('_APP_ASSETS_DIR_')) {
+    define('_APP_ASSETS_DIR_', 'assets/build/');
+}
