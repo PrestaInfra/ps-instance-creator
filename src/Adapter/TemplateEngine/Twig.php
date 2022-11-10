@@ -14,6 +14,8 @@ class Twig extends AbstractTemplateEngine
 {
     protected Environment $twig;
 
+    public const FILE_EXTENSION = 'html.twig';
+
     public function __construct(
         protected string $templatesDir,
         protected string $assetsPath,
@@ -36,6 +38,7 @@ class Twig extends AbstractTemplateEngine
 
     public function render(string $template, array $vars = []): string
     {
+        $template = $this->resolveTemplateFile($template, static::FILE_EXTENSION);
         return $this->twig->render($template, $vars);
     }
 

@@ -17,7 +17,7 @@ final class App
 
     public function renderView(): string
     {
-        return $this->templateEngine->render('index.html.twig', $this->getViewVariables());
+        return $this->templateEngine->render('index', $this->getViewVariables());
     }
 
     protected function getViewVariables(): array

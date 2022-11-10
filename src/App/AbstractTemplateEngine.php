@@ -10,4 +10,9 @@ abstract class AbstractTemplateEngine implements TemplateEngineInterface
         protected ?string $cacheDir = null
     ){
     }
+
+    protected function resolveTemplateFile(string $templateName, string $extension): string
+    {
+        return $templateName.'.'.$extension;
+    }
 }
