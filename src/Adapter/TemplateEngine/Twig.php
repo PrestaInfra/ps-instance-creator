@@ -1,26 +1,26 @@
 <?php
 
-namespace Prestainfra\PsInstanceCreator\Adapter\Twig;
+namespace Prestainfra\PsInstanceCreator\Adapter\TemplateEngine;
 
-use Prestainfra\PsInstanceCreator\App\TemplateEngineInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
 use Exception;
 use Twig\Loader\FilesystemLoader;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Prestainfra\PsInstanceCreator\App\AbstractTemplateEngine;
 
-class Twig implements TemplateEngineInterface
+class Twig extends AbstractTemplateEngine
 {
     protected Environment $twig;
-    protected string $assetsPath;
 
     public function __construct(
-        string $templatesDir,
-        string $assetsPath,
-        ?string $cacheDir = null
+        protected string $templatesDir,
+        protected string $assetsPath,
+        protected ?string $cacheDir = null
     ){
-        $this->assetsPath = $assetsPath;
+
+        parent::__construct($templatesDir, $assetsPath, $cacheDir);
 
         $twigOptions = [];
 
