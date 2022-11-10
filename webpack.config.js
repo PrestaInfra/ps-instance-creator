@@ -1,3 +1,4 @@
+const Vue = require('vue');
 const Encore = require('@symfony/webpack-encore');
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -6,7 +7,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     .setOutputPath('assets/build/')
-    .setPublicPath('/build')
+    .setPublicPath('/assets/build')
     .addEntry('app', './assets/_dev/app.js')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
@@ -22,6 +23,7 @@ Encore
         config.corejs = 3;
     })
     .enableSassLoader()
+    .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();

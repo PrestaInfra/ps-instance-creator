@@ -23,7 +23,8 @@ final class App
     protected function getViewVariables(): array
     {
         return [
-            'assets_dir' => _APP_ASSETS_DIR_
+            'assets_dir' => _APP_ASSETS_DIR_,
+            'ps_docker_images' => $this->dockerClient->getPrestashopImages()
         ];
     }
 }

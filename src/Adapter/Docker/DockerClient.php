@@ -16,7 +16,19 @@ class DockerClient implements DockerClientInterface
 
     public function getPrestashopImages(): array
     {
-        return [];
+        $dockerImages = $this->dockerClient->imageList();
+
+        if (empty($dockerImages)) {
+            return $psDockerImages;
+        }
+
+        $psDockerImages = [];
+
+        foreach ($dockerImages as $dockerImage) {
+            $psDockerImages[$dockerImage->getId()] = $dockerImage->getRepoTags()[0];
+        }
+
+        return $psDockerImages;
     }
 
     public function createPrestaShopInstance(array $options): array

@@ -8,7 +8,12 @@ use Prestainfra\PsInstanceCreator\Adapter\Twig\Twig;
 use Prestainfra\PsInstanceCreator\App\App;
 
 $dockerClient = new DockerClient();
-$templateEngine = new Twig(_APP_TEMPLATES_DIR_, _APP_CACHE_DIR_.'twig');
+$templateEngine = new Twig(
+    _APP_TEMPLATES_DIR_,
+    _APP_ASSETS_DIR_,
+    null/*_APP_CACHE_DIR_.'twig'*/
+);
+
 $app = new App($dockerClient, $templateEngine);
 
 echo $app->renderView();
