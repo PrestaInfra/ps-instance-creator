@@ -19,6 +19,7 @@
         "prestainfra/docker-php-api": "7.1.41.x-dev",
         "prestainfra/docker-php": "v3.0.0",
         "twig/twig": "^2.0",
-        "symfony/asset": "^6.1"
+        "symfony/asset": "^6.1",
+        "symfony/options-resolver": "^6.1"
     }
 }
