@@ -4,6 +4,7 @@ namespace Prestainfra\PsInstanceCreator\Adapter\TemplateEngine;
 
 use Twig\Environment;
 use Twig\TwigFunction;
+use Twig\Extension\DebugExtension;
 use Exception;
 use Twig\Loader\FilesystemLoader;
 use Symfony\Component\Asset\Package;
@@ -24,7 +25,7 @@ class Twig extends AbstractTemplateEngine
 
         parent::__construct($templatesDir, $assetsPath, $cacheDir);
 
-        $twigOptions = [];
+        $twigOptions = ['debug' => true];
 
         $loader = new FilesystemLoader($templatesDir);
 
@@ -34,6 +35,7 @@ class Twig extends AbstractTemplateEngine
 
         $this->twig = new Environment($loader, $twigOptions);
         $this->twig->addFunction(new TwigFunction('load_asset', [$this, 'loadAssetResource']));
+        $this->twig->addExtension(new DebugExtension());
     }
 
     public function render(string $template, array $vars = []): string
