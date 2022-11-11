@@ -1,7 +1,10 @@
-body {
-  padding: 2% 20%;
-}
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-icons";
 
 html, body {
-  background: #F3F4F6;
+  background: #F3F4F6 !important;
+}
+
+#container_generator_form {
+  padding: 2% 20%;
 }

@@ -1,4 +1,3 @@
-const Vue = require('vue');
 const Encore = require('@symfony/webpack-encore');
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -23,7 +22,6 @@ Encore
         config.corejs = 3;
     })
     .enableSassLoader()
-    .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
