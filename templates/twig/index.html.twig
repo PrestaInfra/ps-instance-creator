@@ -8,52 +8,78 @@
     </head>
     <body>
         <div id="app">
+            <form action="" type="POST">
             <template id="step1" v-if="currentStep == 1">
                 <div class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
-                        <div class="md:col-span-1">
-                            <div class="px-4 sm:px-0">
-                                <h1 class="text-lg font-medium leading-6 text-gray-900">Container Informations</h1>
-                                <p class="mt-1 text-sm text-gray-600">Informations about prestashop container instance</p>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="overflow-hidden shadow sm:rounded-md">
+                                <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+                                    <fieldset>
+                                        <legend class="contents text-base font-medium text-gray-900">Project type : </legend>
+                                        <p class="text-sm text-gray-500">Choose the type of instance you want to initialize</p>
+                                        <div class="mt-10 space-y-4">
+                                            <div class="flex items-start">
+                                                <div class="flex h-5 items-center">
+                                                    <input name="project_type" type="radio" class="project_type h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" required checked>
+                                                </div>
+                                                <div class="ml-3 text-sm">
+                                                    <label for="project_type" class="font-medium text-gray-700">Empty container</label>
+                                                    <p class="text-gray-500">An empty container containing only dependencies needed to run a prestashop application. You must install your project manually</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start">
+                                                <div class="flex h-5 items-center">
+                                                    <input name="project_type" type="radio" class="project_type h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" required>
+                                                </div>
+                                                <div class="ml-3 text-sm">
+                                                    <label for="project_type" class="font-medium text-gray-700">Container with a project</label>
+                                                    <p class="text-gray-500">Init a PrestaShop project </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                                    <button type="button" @click.prevent="goToStep(2)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </template>
+            <template id="step2" v-if="currentStep == 2">
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="mt-5 md:col-span-2 md:mt-0">
                                 <div class="overflow-hidden shadow sm:rounded-md">
                                     <div class="bg-white px-4 py-5 sm:p-6">
                                         <div class="grid grid-cols-6 gap-6">
                                             <div class="col-span-6">
-                                                <label for="country" class="block text-sm font-medium text-gray-700">Prestashop image</label>
-                                                <select id="country" name="country" autocomplete="country-name" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" required>
+                                                <label for="image_id" class="block text-sm font-medium text-gray-700">Prestashop image</label>
+                                                <select id="image_id" name="image_id" autocomplete="image_id" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" required>
                                                     <option value="" selected="selected"> --- Select prestashop docker image ----</option>
                                                     {% for image_id, image_name in ps_docker_images %}
                                                         <option value="{{ image_id }}">{{ image_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
-
                                             <div class="col-span-6">
-                                                <label for="app_ports" class="block text-sm font-medium text-gray-700">Application ports</label>
+                                                <label for="repository_url" class="block text-sm font-medium text-gray-700">Repository url</label>
+                                                <div class="mt-1 flex rounded-md shadow-sm">
+                                                    <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">http://</span>
+                                                    <input type="text" name="repository_url" id="repository_url" class="block w-full flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="www.example.com">
+                                                </div>
+                                            </div>
+                                            <div class="col-span-6">
+                                                <label for="app_ports" class="block text-sm font-medium text-gray-700">Project name</label>
                                                 <input type="text" name="app_ports" id="app_ports" autocomplete="app_ports" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-
-                                            <div class="col-span-6 sm:col-span-6">
-                                                <label for="local_volume_path" class="block text-sm font-medium text-gray-700">Local volume path</label>
-                                                <input type="text" name="local_volume_path" id="local_volume_path" autocomplete="local_volume_path" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-
-                                            <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                                                <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
-                                                <input type="text" name="region" id="region" autocomplete="address-level1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                            </div>
-
-                                            <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                                                <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal code</label>
-                                                <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                                        <button type="button" @click.prevent="goToStep(2)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                                        <button type="button" @click.prevent="goToStep(1)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Preview</button>
+                                        <button type="button" @click.prevent="goToStep(3)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
                                     </div>
                                 </div>
                         </div>
@@ -66,7 +92,7 @@
                     </div>
                 </div>
             </template>
-            <template id="step1" v-if="currentStep == 2">
+            <template id="step3" v-if="currentStep == 3">
                 <div class="mt-10 sm:mt-0">
                     <div class="md:grid md:grid-cols-3 md:gap-6">
                         <div class="md:col-span-1">
@@ -131,14 +157,32 @@
                                         </fieldset>
                                     </div>
                                     <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                                        <button type="button" @click.prevent="goToStep(1)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Preview</button>
-                                        <button type="button" @click.prevent="goToStep(2)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                                        <button type="button" @click.prevent="goToStep(3)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Preview</button>
+                                        <button type="button" @click.prevent="goToStep(4)" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
                                     </div>
                                 </div>
                         </div>
                     </div>
                 </div>
             </template>
+            <template id="step4" v-if="currentStep == 4">
+                <div class="mt-10 sm:mt-0">
+                    <div class="md:grid md:grid-cols-3 md:gap-6">
+                        <div class="md:col-span-1">
+                            <div class="px-4 sm:px-0">
+                                <h3 class="text-lg font-medium leading-6 text-gray-900">Notifications</h3>
+                                <p class="mt-1 text-sm text-gray-600">Decide which communications you'd like to receive and how.</p>
+                            </div>
+                        </div>
+                        <div class="mt-5 md:col-span-2 md:mt-0">
+                            <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+                                <button type="submit" name="submitForm" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            </form>
         </div>
 
         <script src="{{ load_asset('app.js') }}"></script>
