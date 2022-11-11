@@ -4,6 +4,8 @@ namespace Prestainfra\PsInstanceCreator\App\Docker;
 
 final class DockerValuesProvider
 {
+    public const DEFAULT_SHOPS_NBR = 1;
+
     public function __construct(
         protected array $parameters,
         protected DockerClientInterface $dockerClient
@@ -33,19 +35,19 @@ final class DockerValuesProvider
         unset($this->parameters[$key]);
     }
 
-    public function getInt(string $key, int $default = 0): int
+    public function getInt(string $key, int $default = 0, bool $forceFromParam = false): int
     {
-        return (int) $this->get($key, $default);
+        return (int) $this->get($key, $default, $forceFromParam);
     }
 
-    public function getBoolean(string $key, bool $default = false): bool
+    public function getBoolean(string $key, bool $default = false, bool $forceFromParam = false): bool
     {
-        return (bool) $this->get($key, $default);
+        return (bool) $this->get($key, $default, $forceFromParam);
     }
 
-    public function getArray(string $key, array $default = []): array
+    public function getArray(string $key, array $default = [], bool $forceFromParam = false): array
     {
-        $value = $this->get($key, $default) ;
+        $value = $this->get($key, $default, $forceFromParam);
 
         if (!is_array($value)) {
             return $default;
@@ -66,5 +68,10 @@ final class DockerValuesProvider
         }
 
         return (string) str_replace(' ', '_', $this->get('project_name', null, true));
+    }
+
+    protected function shops_number(): int
+    {
+        return $this->getInt('shops_number', 1, true) ?? self::DEFAULT_SHOPS_NBR;
     }
 }

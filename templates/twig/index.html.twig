@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="project_name" placeholder="Project name" required>
+                            <input type="text" name="project_name" class="form-control" id="project_name" placeholder="Project name" required>
                             <label for="project_name">Project name</label>
                         </div>
 
@@ -24,6 +24,15 @@
                             <label for="image_id">Template</label>
                         </div>
 
+                        <div class="form-floating mb-3">
+                            <select id="shops_number" name="shops_number" autocomplete="shops_number" class="form-select" required>
+                                {% for i in 1..10 %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="image_id">Shops number</label>
+                        </div>
+
                         <div class="mb-3">
                             <input type="radio" class="btn-check" name="project_type" id="project_type_1" autocomplete="off" checked>
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
@@ -32,7 +41,7 @@
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
                         </div>
 
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3 d-none">
                             <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="repository_url" placeholder="Repository url">
@@ -45,14 +54,14 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="radio" class="btn-check" name="import_database" id="import_database_1" autocomplete="off" checked>
+                            <input type="radio" class="btn-check" name="import_database" id="import_database_1" autocomplete="off">
                             <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
 
-                            <input type="radio" class="btn-check" name="import_database" id="import_database_2" autocomplete="off">
+                            <input type="radio" class="btn-check" name="import_database" id="import_database_2" autocomplete="off" checked>
                             <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
                         </div>
 
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3 d-none">
                             <span class="input-group-text"><i class="bi bi-filetype-sql"></i></span>
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
