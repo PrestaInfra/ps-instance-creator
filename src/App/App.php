@@ -2,25 +2,25 @@
 
 namespace Prestainfra\PsInstanceCreator\App;
 
-use Exception;
+use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
+use Prestainfra\PsInstanceCreator\App\Form\FormHandler;
+use Prestainfra\PsInstanceCreator\App\TemplateEngine\TemplateEngineInterface;
 
 final class App
 {
-    protected $dockerClient;
-    protected $templateEngine;
+    protected FormHandler $formHandler;
 
     public function __construct(
-        DockerClientInterface $dockerClient,
-        TemplateEngineInterface $templateEngine
+        protected DockerClientInterface $dockerClient,
+        protected TemplateEngineInterface $templateEngine
     ){
-        $this->dockerClient = $dockerClient;
-        $this->templateEngine = $templateEngine;
+        $this->formHandler = new FormHandler();
     }
 
     public function renderView(): string
     {
-        if ($this->isFormSubmit('submitForm')) {
-            $handleFormResult = $this->handleForm();
+        if ($this->formHandler->isFormSubmit('submitForm')) {
+            $handleFormResult = $this->formHandler->handleForm($this->dockerClient);
             return $this->templateEngine->render('form_result', [
                 'response' => $handleFormResult
             ]);
@@ -32,38 +32,7 @@ final class App
     protected function getViewVariables(): array
     {
         return [
-            'assets_dir' => _APP_ASSETS_DIR_,
             'ps_docker_images' => $this->dockerClient->getPrestashopImages()
-        ];
-    }
-
-    protected function isFormSubmit(string $submitName): bool
-    {
-        return isset($_POST[$submitName]) || isset($_GET[$submitName]);
-    }
-
-    protected function getFormValue(string $key)
-    {
-        return $_POST[$key] ?? $_GET[$key];
-    }
-
-    protected function handleForm(): array
-    {
-        $messages = [];
-
-        try {
-            $this->dockerClient->createPrestaShopInstance($this->getContainerOption());
-        } catch (Exception  $e) {
-            $messages[] = $e->getMessage();
-        }
-        return $messages;
-    }
-
-    protected function getContainerOption(): array
-    {
-        return [
-            'image_id' => $this->getFormValue('image_id'),
-            'ports' => $this->getFormValue('ports'),
         ];
     }
 }

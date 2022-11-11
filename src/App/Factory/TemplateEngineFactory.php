@@ -2,8 +2,8 @@
 
 namespace Prestainfra\PsInstanceCreator\App\Factory;
 
-use Prestainfra\PsInstanceCreator\App\AbstractTemplateEngine;
 use Exception;
+use Prestainfra\PsInstanceCreator\App\TemplateEngine\AbstractTemplateEngine;
 
 abstract class TemplateEngineFactory
 {

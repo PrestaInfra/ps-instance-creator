@@ -1,6 +1,6 @@
 <?php
 
-namespace Prestainfra\PsInstanceCreator\App;
+namespace Prestainfra\PsInstanceCreator\App\TemplateEngine;
 
 abstract class AbstractTemplateEngine implements TemplateEngineInterface
 {

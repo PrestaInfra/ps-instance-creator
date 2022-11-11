@@ -9,7 +9,7 @@ use Exception;
 use Twig\Loader\FilesystemLoader;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
-use Prestainfra\PsInstanceCreator\App\AbstractTemplateEngine;
+use Prestainfra\PsInstanceCreator\App\TemplateEngine\AbstractTemplateEngine;
 
 class Twig extends AbstractTemplateEngine
 {

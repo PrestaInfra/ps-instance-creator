@@ -3,7 +3,7 @@
 $currentDir = dirname(__FILE__);
 
 if (!defined('_APP_DEBUG_MODE_')) {
-    define('_APP_DEBUG_MODE_', false);
+    define('_APP_DEBUG_MODE_', true);
 }
 
 if (!defined('_APP_ROOT_DIR_')) {

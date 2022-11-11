@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="project_name" placeholder="Project name">
+                            <input type="text" class="form-control" id="project_name" placeholder="Project name" required>
                             <label for="project_name">Project name</label>
                         </div>
 
@@ -18,10 +18,10 @@
                             <select id="image_id" name="image_id" autocomplete="image_id" class="form-select" required>
                                 <option value="" selected="selected"> --- Select prestashop docker image ----</option>
                                 {% for image_id, image_name in ps_docker_images %}
-                                    <option value="{{ image_id }}">{{ image_name }}</option>
+                                    <option value="{{ image_name }}">{{ image_name }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="image_id">Container type</label>
+                            <label for="image_id">Template</label>
                         </div>
 
                         <div class="mb-3">
@@ -58,6 +58,13 @@
                                 <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
                                 <label for="db_sql_url">Database sql url</label>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-secondary" type="submit" name="submitForm">
+                                <i class="bi bi-box-arrow-up"></i> Deploy
+                            </button>
                         </div>
                     </div>
                 </div>

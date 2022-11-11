@@ -3,15 +3,14 @@
 namespace Prestainfra\PsInstanceCreator\Adapter\Docker;
 
 use Docker\API\Model\ContainersCreatePostBody;
-use Prestainfra\PsInstanceCreator\App\DockerClientInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
+use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
 use Docker\Docker;
 use Docker\API\Client as DockerApiClient;
 
 class DockerClient implements DockerClientInterface
 {
     protected DockerApiClient $dockerClient;
-    protected array $options;
 
     public function __construct()
     {
@@ -34,36 +33,24 @@ class DockerClient implements DockerClientInterface
         return $psDockerImages;
     }
 
-    public function createPrestaShopInstance(array $options): array
+    public function createPrestaShopInstance(DockerValuesProvider $dockerValuesProvider): array
     {
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
-
-        $this->options = $resolver->resolve($options);
-
         $containerConfig = new ContainersCreatePostBody();
-        $containerConfig->setImage($resolver->offsetGet('image_id'));
 
-        $containerConfig->setTty($resolver->offsetGet('tty'));
-        $containerConfig->setAttachStdin($resolver->offsetGet('stdin'));
-        $containerConfig->setAttachStdout($resolver->offsetGet('stdout'));
-        $containerConfig->setAttachStderr($resolver->offsetGet('stderr'));
+        $containerConfig->setImage($dockerValuesProvider->get('image_id'));
+        $containerConfig->setTty($dockerValuesProvider->getBoolean('tty'));
+        $containerConfig->setAttachStdin($dockerValuesProvider->getBoolean('stdin'));
+        $containerConfig->setAttachStdout($dockerValuesProvider->getBoolean('stdout'));
+        $containerConfig->setAttachStderr($dockerValuesProvider->getBoolean('stderr'));
 
-        return [];
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setRequired(['image_id', 'ports']);
-
-        $resolver->setDefaults([
-            'stdin' => true,
-            'stdout' => true,
-            'stderr' => true,
-            'tty' => true,
+        $containerCreateResult = $this->dockerClient->containerCreate($containerConfig, [
+            'name' => $dockerValuesProvider->get('container_name')
         ]);
 
-        $resolver->setAllowedValues('image_id', 'string');
-        $resolver->setAllowedValues('ports', 'array');
+        if ($containerCreateResult) {
+            $this->dockerClient->containerStart($containerCreateResult->getId());
+        }
+
+        return [];
     }
 }
