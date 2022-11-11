@@ -25,7 +25,9 @@ class Twig extends AbstractTemplateEngine
 
         parent::__construct($templatesDir, $assetsPath, $cacheDir);
 
-        $twigOptions = ['debug' => true];
+        $twigOptions = [
+            'debug' => _APP_DEBUG_MODE_
+        ];
 
         $loader = new FilesystemLoader($templatesDir);
 
@@ -35,7 +37,10 @@ class Twig extends AbstractTemplateEngine
 
         $this->twig = new Environment($loader, $twigOptions);
         $this->twig->addFunction(new TwigFunction('load_asset', [$this, 'loadAssetResource']));
-        $this->twig->addExtension(new DebugExtension());
+
+        if ($twigOptions['debug']) {
+            $this->twig->addExtension(new DebugExtension());
+        }
     }
 
     public function render(string $template, array $vars = []): string
@@ -47,7 +52,7 @@ class Twig extends AbstractTemplateEngine
     /**
      * @throws Exception
      */
-    public function loadAssetResource(string $resourceName, bool $useBuildPrefix = true): string
+    public function loadAssetResource(string $resourceName): string
     {
         $jsonManifestVersionStrategy = new JsonManifestVersionStrategy(
             $this->assetsPath.'manifest.json',

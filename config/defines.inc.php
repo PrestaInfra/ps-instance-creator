@@ -2,6 +2,10 @@
 
 $currentDir = dirname(__FILE__);
 
+if (!defined('_APP_DEBUG_MODE_')) {
+    define('_APP_DEBUG_MODE_', false);
+}
+
 if (!defined('_APP_ROOT_DIR_')) {
     define('_APP_ROOT_DIR_', realpath($currentDir.'/..'));
 }
