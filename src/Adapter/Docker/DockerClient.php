@@ -3,42 +3,87 @@
 namespace Prestainfra\PsInstanceCreator\Adapter\Docker;
 
 use Docker\API\Model\ContainersCreatePostBody;
+use Docker\API\Model\ContainerSummaryItem;
 use Docker\API\Model\HostConfig;
+use Docker\API\Model\ImageSummary;
 use Docker\API\Model\PortBinding;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
 use Docker\Docker;
 use Docker\API\Client as DockerApiClient;
+use Exception;
+use Docker\API\Model\ContainersCreatePostResponse201;
 
 class DockerClient implements DockerClientInterface
 {
     protected DockerApiClient $dockerClient;
+    protected array $containersList = [];
+    protected array $imagesList = [];
 
     public function __construct()
     {
         $this->dockerClient = Docker::create();
     }
 
-    public function getPrestashopImages(): array
+    private function loadContainers(bool $forceLoad = false): void
     {
-        $dockerImages = $this->dockerClient->imageList();
-        $psDockerImages = [];
-
-        if (empty($dockerImages)) {
-            return $psDockerImages;
+        if (!$forceLoad && !empty($this->containersList)) {
+            return ;
         }
+
+        $dockerContainers = $this->dockerClient->containerList();
+
+        foreach ($dockerContainers as $dockerContainer) {
+            $this->containersList[$dockerContainer->getId()] = $dockerContainer;
+        }
+    }
+
+    private function loadImages(bool $forceLoad = false): void
+    {
+        if (!$forceLoad && !empty($this->imagesList)) {
+            return ;
+        }
+
+        $dockerImages = $this->dockerClient->imageList();
 
         foreach ($dockerImages as $dockerImage) {
-            $psDockerImages[$dockerImage->getId()] = $dockerImage->getRepoTags()[0];
+            $this->imagesList[$dockerImage->getId()] = $dockerImage;
+        }
+    }
+
+    public function getContainerSummaryById(string $containerId, bool $forceLoad = false): ?ContainerSummaryItem
+    {
+        $this->loadContainers($forceLoad);
+
+        return $this->containersList[$containerId] ?? null;
+    }
+
+    protected function getImageSummaryById(string $imageId, bool $forceLoad = false): ?ImageSummary
+    {
+        $this->loadImages($forceLoad);
+
+        return $this->imagesList[$imageId] ?? null;
+    }
+
+    public function getPrestashopImages(): array
+    {
+        $this->loadImages();
+
+        $imagesList = [];
+
+        foreach ($this->imagesList as $image) {
+            $imagesList[$image->getId()] = $image->getRepoTags()[0];
         }
 
-        return $psDockerImages;
+        return $imagesList;
     }
 
     public function createPrestaShopInstance(DockerValuesProvider $dockerValuesProvider): array
     {
+        $imageSummary = $this->getImageSummaryById($dockerValuesProvider->get('image_id'));
+
         $containerConfig = (new ContainersCreatePostBody())
-            ->setImage($dockerValuesProvider->get('image_id'))
+            ->setImage($imageSummary->getRepoTags()[0])
             ->setTty($dockerValuesProvider->getBoolean('tty'))
             ->setAttachStdin($dockerValuesProvider->getBoolean('stdin'))
             ->setAttachStdout($dockerValuesProvider->getBoolean('stdout'))
@@ -68,10 +113,13 @@ class DockerClient implements DockerClientInterface
             'name' => $dockerValuesProvider->get('container_name')
         ]);
 
-        if ($containerCreateResult) {
-            $this->dockerClient->containerStart($containerCreateResult->getId());
+        if (!is_a($containerCreateResult, ContainersCreatePostResponse201::class)) {
+            throw new Exception('Error during create container');
         }
 
-        return [];
+        $this->dockerClient->containerStart($containerCreateResult->getId());
+        $containerSummaryItem = $this->getContainerSummaryById($containerCreateResult->getId(), true);
+
+        return (new ContainerPresenter())->present($containerSummaryItem);
     }
 }

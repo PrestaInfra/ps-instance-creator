@@ -1,132 +1,117 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Prestashop docker instance creator</title>
-        <link rel="stylesheet" href="{{ load_asset('app.css') }}">
-    </head>
-    <body>
-        <div id="app" class="container">
-            <form action="" method="POST" id="container_generator_form">
-                <h1 class="text-center mb-3"><i class="bi bi-boxes"></i> PrestaShop Instances creator</h1>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="form-floating mb-3">
-                            <input type="text" name="project_name" class="form-control" id="project_name" placeholder="Project name" required>
-                            <label for="project_name">Project name</label>
-                        </div>
+{% extends "layout.html.twig" %}
 
-                        <div class="form-floating mb-3">
-                            <select id="image_id" name="image_id" autocomplete="image_id" class="form-select" required>
-                                <option value="" selected="selected"> --- Select prestashop docker image ----</option>
-                                {% for image_id, image_name in ps_docker_images %}
-                                    <option value="{{ image_id }}">{{ image_name }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="image_id">Template</label>
-                        </div>
+{% block card_content %}
+    <div class="form-floating mb-3">
+        <input type="text" name="project_name" class="form-control" id="project_name" placeholder="Project name" required>
+        <label for="project_name">Project name</label>
+    </div>
 
-                        <div class="form-floating mb-3">
-                            <select id="shops_number" name="shops_number" autocomplete="shops_number" class="form-select" required>
-                                {% for i in 1..15 %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="image_id">Shops number</label>
-                        </div>
+    <div class="form-floating mb-3">
+        <select id="image_id" name="image_id" autocomplete="image_id" class="form-select" required>
+            <option value="" selected="selected"> --- Select prestashop docker image ----</option>
+            {% for image_id, image_name in ps_docker_images %}
+                <option value="{{ image_id }}">{{ image_name }}</option>
+            {% endfor %}
+        </select>
+        <label for="image_id">Template</label>
+    </div>
 
-                        <div class="mb-3">
-                            <input type="radio"
-                                   class="btn-check app-switch-el"
-                                   data-elements-to-hidden="repository-block,sql-block,data-base-block,env-block"
-                                   name="project_type"
-                                   id="project_type_1"
-                                   autocomplete="off"
-                                   value="1"
-                                   checked
-                            >
-                            <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
+    <div class="form-floating mb-3">
+        <select id="shops_number" name="shops_number" autocomplete="shops_number" class="form-select" required>
+            {% for i in 1..15 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+        <label for="image_id">Shops number</label>
+    </div>
 
-                            <input type="radio"
-                                   class="btn-check app-switch-el"
-                                   data-elements-to-show="repository-block,data-base-block,env-block"
-                                   name="project_type"
-                                   id="project_type_2"
-                                   value="0"
-                                   autocomplete="off"
-                            >
-                            <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
-                        </div>
+    <div class="mb-3">
+        <input type="radio"
+               class="btn-check app-switch-el"
+               data-elements-to-hidden="repository-block,sql-block,data-base-block,env-block"
+               name="project_type"
+               id="project_type_1"
+               autocomplete="off"
+               value="1"
+               checked
+        >
+        <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
 
-                        <div class="input-group mb-3 d-none" id="repository-block">
-                            <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="repository_url" placeholder="Repository url">
-                                <label for="repository_url">Repository url</label>
-                            </div>
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="repository_branch" placeholder="Repository branch">
-                                <label for="repository_branch">Repository branch</label>
-                            </div>
-                        </div>
+        <input type="radio"
+               class="btn-check app-switch-el"
+               data-elements-to-show="repository-block,data-base-block,env-block"
+               name="project_type"
+               id="project_type_2"
+               value="0"
+               autocomplete="off"
+        >
+        <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
+    </div>
 
-                        <div class="mb-3" id="database-block">
-                            <input type="radio"
-                                   class="btn-check app-switch-el"
-                                   data-elements-to-hidden="sql-block"
-                                   name="import_database"
-                                   id="import_database_2"
-                                   autocomplete="off"
-                                   value="0"
-                                   checked
-                            >
-                            <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
-
-                            <input type="radio"
-                                   class="btn-check app-switch-el"
-                                   data-elements-to-show="sql-block"
-                                   name="import_database"
-                                   id="import_database_1"
-                                   value="1"
-                                   autocomplete="off"
-                            >
-                            <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
-                        </div>
-
-                        <div class="input-group mb-3 d-none" id="sql-block">
-                            <span class="input-group-text"><i class="bi bi-filetype-sql"></i></span>
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
-                                <label for="db_sql_url">Database sql url</label>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3 app-scroll d-none" id="env-block">
-                            {% for var_name, var_value in ps_env_vars %}
-                                <div class="col-12">
-                                    <div class="input-group">
-                                        <div class="input-group-text" style="width: 50%">{{ var_name }}</div>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="{{ var_name }}"
-                                               placeholder="{{ var_name }}"
-                                               value="{{ var_value }}"
-                                               name="{{ var_name }}"
-                                        >
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-secondary" type="submit" name="submitForm">
-                                <i class="bi bi-box-arrow-up"></i> Deploy
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+    <div class="input-group mb-3 d-none" id="repository-block">
+        <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="repository_url" placeholder="Repository url">
+            <label for="repository_url">Repository url</label>
         </div>
-    </body>
-    <script src="{{ load_asset('runtime.js') }}"></script>
-    <script src="{{ load_asset('app.js') }}"></script>
-</html>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="repository_branch" placeholder="Repository branch">
+            <label for="repository_branch">Repository branch</label>
+        </div>
+    </div>
+
+    <div class="mb-3" id="database-block">
+        <input type="radio"
+               class="btn-check app-switch-el"
+               data-elements-to-hidden="sql-block"
+               name="import_database"
+               id="import_database_2"
+               autocomplete="off"
+               value="0"
+               checked
+        >
+        <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
+
+        <input type="radio"
+               class="btn-check app-switch-el"
+               data-elements-to-show="sql-block"
+               name="import_database"
+               id="import_database_1"
+               value="1"
+               autocomplete="off"
+        >
+        <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
+    </div>
+
+    <div class="input-group mb-3 d-none" id="sql-block">
+        <span class="input-group-text"><i class="bi bi-filetype-sql"></i></span>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
+            <label for="db_sql_url">Database sql url</label>
+        </div>
+    </div>
+    <div class="input-group mb-3 app-scroll d-none" id="env-block">
+        {% for var_name, var_value in ps_env_vars %}
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-text" style="width: 50%">{{ var_name }}</div>
+                    <input type="text"
+                           class="form-control"
+                           id="{{ var_name }}"
+                           placeholder="{{ var_name }}"
+                           value="{{ var_value }}"
+                           name="{{ var_name }}"
+                    >
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block card_footer %}
+    <div class="d-grid gap-2">
+        <button class="btn btn-secondary" type="submit" name="submitForm">
+            <i class="bi bi-box-arrow-up"></i> Deploy
+        </button>
+    </div>
+{% endblock %}

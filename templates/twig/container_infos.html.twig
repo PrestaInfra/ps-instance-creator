@@ -1,0 +1,48 @@
+{% extends "layout.html.twig" %}
+
+{% block card_content %}
+    <div class="form-floating mb-3">
+        <input type="texte" class="form-control" placeholder="{{ container.id }}" value="{{ container.id }}" disabled>
+        <label>Container id</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="texte" class="form-control" placeholder="{{ container.name }}" value="{{ container.name }}" disabled>
+        <label>Container</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="texte" class="form-control" placeholder="{{ container.image_name }}" value="{{ container.image_name }}" disabled>
+        <label>Template</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="texte" class="form-control" placeholder="{{ container.status }}" value="{{ container.status }}" disabled>
+        <label>Status</label>
+    </div>
+    <div class="mb-3">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Instance url</th>
+                <th scope="col">Volume</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            {% for id, host in container.hosts %}
+                <tr>
+                    <td>{{ id + 1 }}</td>
+                    <td><a href="http://{{ host.ip }}:{{ host.port }}" target="_blank">http://{{ host.ip }}:{{ host.port }}</a></td>
+                    <td>{{ container.volumes|join(',') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block card_footer %}
+    <div class="d-grid gap-2">
+        <a class="btn btn-secondary" href="./">
+            <i class="bi bi-arrow-left-square"></i> Deploy a new container
+        </a>
+    </div>
+{% endblock %}

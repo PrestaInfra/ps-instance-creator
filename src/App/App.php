@@ -27,8 +27,9 @@ final class App
     {
         if ($this->formHandler->isFormSubmit('submitForm')) {
             $handleFormResult = $this->formHandler->handleForm($this->dockerClient);
-            return $this->templateEngine->render('form_result', [
-                'response' => $handleFormResult
+
+            return $this->templateEngine->render('container_infos', [
+                'container' => $handleFormResult
             ]);
         }
 

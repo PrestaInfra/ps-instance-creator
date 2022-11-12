@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+        <title>Prestashop docker instance creator</title>
+        <link rel="stylesheet" href="{{ load_asset('app.css') }}">
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div id="app" class="container">
+    {% block form %}
+    <form action="" method="POST" id="container_generator_form">
+        <h1 class="text-center mb-3"><i class="bi bi-boxes"></i> PrestaShop Instances creator</h1>
+        <div class="card">
+            <div class="card-body">
+                {% block card_content %}
+                {% endblock %}
+            </div>
+            <div class="card-footer">
+                {% block card_footer %}
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+    {% endblock %}
+</div>
+{% endblock %}
+</body>
+{% block bottom %}
+    <script src="{{ load_asset('runtime.js') }}"></script>
+    <script src="{{ load_asset('app.js') }}"></script>
+{% endblock %}
+</html>
