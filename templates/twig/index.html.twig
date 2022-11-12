@@ -19,7 +19,7 @@
                             <select id="image_id" name="image_id" autocomplete="image_id" class="form-select" required>
                                 <option value="" selected="selected"> --- Select prestashop docker image ----</option>
                                 {% for image_id, image_name in ps_docker_images %}
-                                    <option value="{{ image_name }}">{{ image_name }}</option>
+                                    <option value="{{ image_id }}">{{ image_name }}</option>
                                 {% endfor %}
                             </select>
                             <label for="image_id">Template</label>
@@ -126,44 +126,7 @@
                 </div>
             </form>
         </div>
-        <script src="{{ load_asset('app.js') }}"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                let appSwitchSelector = document.getElementsByClassName('app-switch-el');
-                for (let i in appSwitchSelector) {
-                    let element = appSwitchSelector[i];
-
-                    if(typeof element  === 'object' && element.nodeType !== undefined){
-                        element.addEventListener('change', () =>{
-                            if (element.dataset.elementsToHidden) {
-                                let elementsToHidden = element.dataset.elementsToHidden.split(',');
-                                toggleClasses(elementsToHidden, false);
-                            }
-
-                            if (element.dataset.elementsToShow) {
-                                let elementsToShow = element.dataset.elementsToShow.split(',');
-                                toggleClasses(elementsToShow, true);
-                            }
-                        })
-                    }
-                }
-            })
-
-            function toggleClasses(elementsToToggle, display)
-            {
-                if (elementsToToggle.length) {
-                    for (let i in elementsToToggle) {
-                        let elementToToggle = document.getElementById(elementsToToggle[i]);
-                        if (elementToToggle){
-                            if (display) {
-                                elementToToggle.classList.remove('d-none');
-                            } else {
-                                elementToToggle.classList.add('d-none');
-                            }
-                        }
-                    }
-                }
-            }
-        </script>
     </body>
+    <script src="{{ load_asset('runtime.js') }}"></script>
+    <script src="{{ load_asset('app.js') }}"></script>
 </html>
