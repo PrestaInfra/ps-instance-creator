@@ -6,7 +6,8 @@
     </head>
     <body>
         <div id="app" class="container">
-            <form action="" method="POST" class="mt-xxl-5" id="container_generator_form">
+            <form action="" method="POST" id="container_generator_form">
+                <h1 class="text-center mb-3"><i class="bi bi-boxes"></i> PrestaShop Instances creator</h1>
                 <div class="card">
                     <div class="card-body">
                         <div class="form-floating mb-3">
@@ -26,7 +27,7 @@
 
                         <div class="form-floating mb-3">
                             <select id="shops_number" name="shops_number" autocomplete="shops_number" class="form-select" required>
-                                {% for i in 1..10 %}
+                                {% for i in 1..15 %}
                                     <option value="{{ i }}">{{ i }}</option>
                                 {% endfor %}
                             </select>
@@ -34,10 +35,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="radio" class="btn-check" name="project_type" id="project_type_1" autocomplete="off" checked>
+                            <input type="radio" class="btn-check app-switch-el" name="project_type" id="project_type_1" autocomplete="off" value="0" checked>
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
 
-                            <input type="radio" class="btn-check" name="project_type" id="project_type_2" autocomplete="off">
+                            <input type="radio" class="btn-check app-switch-el" name="project_type" id="project_type_2" value="1" autocomplete="off">
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
                         </div>
 
@@ -54,11 +55,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="radio" class="btn-check" name="import_database" id="import_database_1" autocomplete="off">
-                            <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
-
-                            <input type="radio" class="btn-check" name="import_database" id="import_database_2" autocomplete="off" checked>
+                            <input type="radio" class="btn-check app-switch-el" name="import_database" id="import_database_2" autocomplete="off" value="0" checked>
                             <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
+
+                            <input type="radio" class="btn-check app-switch-el" name="import_database" id="import_database_1" value="1" autocomplete="off">
+                            <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
                         </div>
 
                         <div class="input-group mb-3 d-none">
@@ -67,6 +68,22 @@
                                 <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
                                 <label for="db_sql_url">Database sql url</label>
                             </div>
+                        </div>
+                        <div class="input-group mb-3 app-scroll d-none">
+                            {% for var_name, var_value in ps_env_vars %}
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <div class="input-group-text" style="width: 50%">{{ var_name }}</div>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="{{ var_name }}"
+                                               placeholder="{{ var_name }}"
+                                               value="{{ var_value }}"
+                                               name="{{ var_name }}"
+                                        >
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="card-footer">
@@ -80,5 +97,19 @@
             </form>
         </div>
         <script src="{{ load_asset('app.js') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let appSwitchSelector = document.getElementsByClassName('app-switch-el');
+                for (let i in appSwitchSelector) {
+                    let element = appSwitchSelector[i];
+
+                    if(typeof element  === 'object' && element.nodeType !== undefined){
+                        element.addEventListener('change', () =>{
+                            let elementToHidden = element.dataset.hiddenElements;
+                        })
+                    }
+                }
+            })
+        </script>
     </body>
 </html>

@@ -5,6 +5,7 @@ namespace Prestainfra\PsInstanceCreator\App\Form;
 use Exception;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
+use Prestainfra\PsInstanceCreator\App\Repository\PrestaShopRepository;
 
 final class FormHandler
 {
@@ -30,6 +31,11 @@ final class FormHandler
         return $_POST[$key] ?? $_GET[$key];
     }
 
+    public function has(string $key): bool
+    {
+        return isset($_POST[$key]) || isset($_GET[$key]);
+    }
+
     public function isFormSubmit(string $submitName): bool
     {
         return isset($_POST[$submitName]) || isset($_GET[$submitName]);
@@ -41,6 +47,21 @@ final class FormHandler
             'image_id' => $this->getFormValue('image_id'),
             'project_name' => $this->getFormValue('project_name'),
             'shops_number' => (int) $this->getFormValue('shops_number'),
+            'env_vars' => $this->getEnvVars(),
         ];
+    }
+
+    protected function getEnvVars(): array
+    {
+        $defaultEnvVars = (new PrestaShopRepository())->getDefaultEnvVars();
+        $envVars = [];
+
+        foreach ($defaultEnvVars as $varName => $defaultValue) {
+            $value = $this->has($varName) ? $this->getFormValue($varName) : $defaultValue;
+            $varValueKey = sprintf('%s=%s', $varName, $value);
+            $envVars[] = $varValueKey;
+        }
+
+        return $envVars;
     }
 }

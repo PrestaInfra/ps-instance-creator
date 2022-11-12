@@ -43,6 +43,7 @@ class DockerClient implements DockerClientInterface
             ->setAttachStdin($dockerValuesProvider->getBoolean('stdin'))
             ->setAttachStdout($dockerValuesProvider->getBoolean('stdout'))
             ->setAttachStderr($dockerValuesProvider->getBoolean('stderr'))
+            ->setEnv($dockerValuesProvider->getArray('env_vars'))
         ;
 
         $shopsNbr = $dockerValuesProvider->getInt('shops_number');
