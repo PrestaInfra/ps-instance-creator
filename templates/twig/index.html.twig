@@ -35,14 +35,29 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="radio" class="btn-check app-switch-el" name="project_type" id="project_type_1" autocomplete="off" value="0" checked>
+                            <input type="radio"
+                                   class="btn-check app-switch-el"
+                                   data-elements-to-hidden="repository-block,sql-block,data-base-block,env-block"
+                                   name="project_type"
+                                   id="project_type_1"
+                                   autocomplete="off"
+                                   value="1"
+                                   checked
+                            >
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
 
-                            <input type="radio" class="btn-check app-switch-el" name="project_type" id="project_type_2" value="1" autocomplete="off">
+                            <input type="radio"
+                                   class="btn-check app-switch-el"
+                                   data-elements-to-show="repository-block,data-base-block,env-block"
+                                   name="project_type"
+                                   id="project_type_2"
+                                   value="0"
+                                   autocomplete="off"
+                            >
                             <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
                         </div>
 
-                        <div class="input-group mb-3 d-none">
+                        <div class="input-group mb-3 d-none" id="repository-block">
                             <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="repository_url" placeholder="Repository url">
@@ -54,22 +69,37 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <input type="radio" class="btn-check app-switch-el" name="import_database" id="import_database_2" autocomplete="off" value="0" checked>
+                        <div class="mb-3" id="database-block">
+                            <input type="radio"
+                                   class="btn-check app-switch-el"
+                                   data-elements-to-hidden="sql-block"
+                                   name="import_database"
+                                   id="import_database_2"
+                                   autocomplete="off"
+                                   value="0"
+                                   checked
+                            >
                             <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
 
-                            <input type="radio" class="btn-check app-switch-el" name="import_database" id="import_database_1" value="1" autocomplete="off">
+                            <input type="radio"
+                                   class="btn-check app-switch-el"
+                                   data-elements-to-show="sql-block"
+                                   name="import_database"
+                                   id="import_database_1"
+                                   value="1"
+                                   autocomplete="off"
+                            >
                             <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
                         </div>
 
-                        <div class="input-group mb-3 d-none">
+                        <div class="input-group mb-3 d-none" id="sql-block">
                             <span class="input-group-text"><i class="bi bi-filetype-sql"></i></span>
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
                                 <label for="db_sql_url">Database sql url</label>
                             </div>
                         </div>
-                        <div class="input-group mb-3 app-scroll d-none">
+                        <div class="input-group mb-3 app-scroll d-none" id="env-block">
                             {% for var_name, var_value in ps_env_vars %}
                                 <div class="col-12">
                                     <div class="input-group">
@@ -105,11 +135,35 @@
 
                     if(typeof element  === 'object' && element.nodeType !== undefined){
                         element.addEventListener('change', () =>{
-                            let elementToHidden = element.dataset.hiddenElements;
+                            if (element.dataset.elementsToHidden) {
+                                let elementsToHidden = element.dataset.elementsToHidden.split(',');
+                                toggleClasses(elementsToHidden, false);
+                            }
+
+                            if (element.dataset.elementsToShow) {
+                                let elementsToShow = element.dataset.elementsToShow.split(',');
+                                toggleClasses(elementsToShow, true);
+                            }
                         })
                     }
                 }
             })
+
+            function toggleClasses(elementsToToggle, display)
+            {
+                if (elementsToToggle.length) {
+                    for (let i in elementsToToggle) {
+                        let elementToToggle = document.getElementById(elementsToToggle[i]);
+                        if (elementToToggle){
+                            if (display) {
+                                elementToToggle.classList.remove('d-none');
+                            } else {
+                                elementToToggle.classList.add('d-none');
+                            }
+                        }
+                    }
+                }
+            }
         </script>
     </body>
 </html>
