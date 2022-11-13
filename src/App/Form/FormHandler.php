@@ -9,6 +9,8 @@ use Prestainfra\PsInstanceCreator\App\Repository\PrestaShopRepository;
 
 final class FormHandler
 {
+    public const ENV_VARS_DELIMITER = ';';
+
     public function handleForm(DockerClientInterface $dockerClient): array
     {
         $messages = [];
@@ -51,15 +53,35 @@ final class FormHandler
         ];
     }
 
+    public function isAdvancedContainer(): bool
+    {
+        return (bool) $this->getFormValue('project_type');
+    }
+
     protected function getEnvVars(): array
     {
-        $defaultEnvVars = (new PrestaShopRepository())->getDefaultEnvVars();
+        $formEnvVars = $this->getFormValue('env_vars');
+
+        if (!$this->isAdvancedContainer() || empty($formEnvVars)) {
+            return [];
+        }
+
+        $formEnvVarsList = explode(self::ENV_VARS_DELIMITER, $formEnvVars);
+
+        if (empty($formEnvVarsList)) {
+            return [];
+        }
+
         $envVars = [];
 
-        foreach ($defaultEnvVars as $varName => $defaultValue) {
-            $value = $this->has($varName) ? $this->getFormValue($varName) : $defaultValue;
-            $varValueKey = sprintf('%s=%s', $varName, $value);
-            $envVars[] = $varValueKey;
+        foreach ($formEnvVarsList as $envVarLine) {
+            $envVarInfos = explode('=', $envVarLine);
+
+            if (empty($envVarInfos) || count($envVarInfos) != 2) {
+                continue;
+            }
+
+            $envVars[] = sprintf('%s=%s', trim($envVarInfos[0]), $envVarInfos[1]);
         }
 
         return $envVars;

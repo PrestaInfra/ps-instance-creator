@@ -27,84 +27,30 @@
 
     <div class="mb-3">
         <input type="radio"
-               class="btn-check app-switch-el"
-               data-elements-to-hidden="repository-block,sql-block,data-base-block,env-block"
+               class="btn-check advanced-config-switch"
                name="project_type"
                id="project_type_1"
                autocomplete="off"
-               value="1"
+               value="0"
                checked
         >
         <label class="btn btn-sm btn-outline-secondary" for="project_type_1">Empty container</label>
 
         <input type="radio"
-               class="btn-check app-switch-el"
-               data-elements-to-show="repository-block,data-base-block,env-block"
+               class="btn-check advanced-config-switch"
                name="project_type"
                id="project_type_2"
-               value="0"
+               value="1"
                autocomplete="off"
         >
         <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
     </div>
 
-    <div class="input-group mb-3 d-none" id="repository-block">
-        <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+    <div class="input-group is-advanced-config d-none">
         <div class="form-floating">
-            <input type="text" class="form-control" id="repository_url" placeholder="Repository url">
-            <label for="repository_url">Repository url</label>
+            <textarea class="form-control text-left" name="env_vars" placeholder="ENV VARS" id="app_env_vars">{% for var_name, var_value in ps_env_vars %}{{ var_name }}={{ var_value }};&#13;&#10;{% endfor %}</textarea>
+            <label for="env_vars">ENV VARS</label>
         </div>
-        <div class="form-floating">
-            <input type="text" class="form-control" id="repository_branch" placeholder="Repository branch">
-            <label for="repository_branch">Repository branch</label>
-        </div>
-    </div>
-
-    <div class="mb-3" id="database-block">
-        <input type="radio"
-               class="btn-check app-switch-el"
-               data-elements-to-hidden="sql-block"
-               name="import_database"
-               id="import_database_2"
-               autocomplete="off"
-               value="0"
-               checked
-        >
-        <label class="btn btn-sm btn-outline-secondary" for="import_database_2">Don't import database</label>
-
-        <input type="radio"
-               class="btn-check app-switch-el"
-               data-elements-to-show="sql-block"
-               name="import_database"
-               id="import_database_1"
-               value="1"
-               autocomplete="off"
-        >
-        <label class="btn btn-sm btn-outline-secondary" for="import_database_1">Import database</label>
-    </div>
-
-    <div class="input-group mb-3 d-none" id="sql-block">
-        <span class="input-group-text"><i class="bi bi-filetype-sql"></i></span>
-        <div class="form-floating">
-            <input type="text" class="form-control" id="db_sql_url" placeholder="Database sql url">
-            <label for="db_sql_url">Database sql url</label>
-        </div>
-    </div>
-    <div class="input-group mb-3 app-scroll d-none" id="env-block">
-        {% for var_name, var_value in ps_env_vars %}
-            <div class="col-12">
-                <div class="input-group">
-                    <div class="input-group-text" style="width: 50%">{{ var_name }}</div>
-                    <input type="text"
-                           class="form-control"
-                           id="{{ var_name }}"
-                           placeholder="{{ var_name }}"
-                           value="{{ var_value }}"
-                           name="{{ var_name }}"
-                    >
-                </div>
-            </div>
-        {% endfor %}
     </div>
 {% endblock %}
 

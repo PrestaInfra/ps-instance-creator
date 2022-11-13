@@ -1,36 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let appSwitchSelector = document.getElementsByClassName('app-switch-el');
-    for (let i in appSwitchSelector) {
-        let element = appSwitchSelector[i];
+    toggleElementsOnCheck(
+        'advanced-config-switch',
+        'is-advanced-config'
+    );
+});
 
-        if(typeof element  === 'object' && element.nodeType !== undefined){
-            element.addEventListener('change', () =>{
-                if (element.dataset.elementsToHidden) {
-                    let elementsToHidden = element.dataset.elementsToHidden.split(',');
-                    toggleClasses(elementsToHidden, false);
-                }
+function toggleElementsOnCheck(switcherClass, elementToggleClass){
+    let advancedParamsSwitchSelector = document.getElementsByClassName(switcherClass);
+    let advancedParamsSelector = document.getElementsByClassName(elementToggleClass);
 
-                if (element.dataset.elementsToShow) {
-                    let elementsToShow = element.dataset.elementsToShow.split(',');
-                    toggleClasses(elementsToShow, true);
+    for (let i in advancedParamsSwitchSelector) {
+        if (advancedParamsSwitchSelector[i].nodeType !== undefined){
+            advancedParamsSwitchSelector[i].addEventListener('change', () =>{
+                let isAdvancedParamsEnabled = advancedParamsSwitchSelector[i].getAttribute('value') === '1';
+
+                for (let x in advancedParamsSelector) {
+                    if (advancedParamsSelector[x].nodeType !== undefined){
+                        advancedParamsSelector[x].classList[isAdvancedParamsEnabled ? 'remove' : 'add']('d-none');
+                    }
                 }
             })
-        }
-    }
-})
-
-function toggleClasses(elementsToToggle, display)
-{
-    if (elementsToToggle.length) {
-        for (let i in elementsToToggle) {
-            let elementToToggle = document.getElementById(elementsToToggle[i]);
-            if (elementToToggle){
-                if (display) {
-                    elementToToggle.classList.remove('d-none');
-                } else {
-                    elementToToggle.classList.add('d-none');
-                }
-            }
         }
     }
 }
