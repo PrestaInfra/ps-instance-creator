@@ -60,19 +60,21 @@ final class FormHandler
 
     protected function getEnvVars(): array
     {
+        $envVars = [
+            'IS_ADVANCED_CONTAINER='.(int) $this->isAdvancedContainer(),
+        ];
+
         $formEnvVars = $this->getFormValue('env_vars');
 
         if (!$this->isAdvancedContainer() || empty($formEnvVars)) {
-            return [];
+            $envVars;
         }
 
         $formEnvVarsList = explode(self::ENV_VARS_DELIMITER, $formEnvVars);
 
         if (empty($formEnvVarsList)) {
-            return [];
+            $envVars;
         }
-
-        $envVars = [];
 
         foreach ($formEnvVarsList as $envVarLine) {
             $envVarInfos = explode('=', $envVarLine);
