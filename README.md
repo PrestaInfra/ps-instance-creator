@@ -19,3 +19,11 @@ Prestashop docker instance creator
 
 
 NOTE : Use releases for production version. See here https://github.com/PrestaInfra/ps-instance-creator/releases
+
+# Env vars
+
+| Var                            | description                     | Required |
+|:-------------------------------|:--------------------------------|:--------:|
+| `PS_INFRA_NETWORK_ID`          | Ps infra network id             |    NO    |
+| `PS_INFRA_MOUNT_SOURCE_PATH`   | Ps infra host mount source path |    NO    |
+| `PS_INFRA_MOUNT_TARGET_PATH`   | Ps infra container mount target |    NO    |

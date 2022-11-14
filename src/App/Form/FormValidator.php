@@ -23,7 +23,6 @@ final class FormValidator
             'shops_number',
             'host',
             'exposed_port',
-            'env_vars',
             'network_id',
         ]);
 
@@ -38,6 +37,8 @@ final class FormValidator
             'exposed_port' => '80/tcp',
             'env_vars' => [],
             'network_id' => null,
+            'mount_source' => null,
+            'mount_target' => null,
         ]);
 
         $resolver
@@ -50,6 +51,8 @@ final class FormValidator
             ->setAllowedTypes('env_vars', 'array')
             ->setAllowedTypes('env_vars', 'array')
             ->setAllowedTypes('network_id', ['null', 'string'])
+            ->setAllowedTypes('mount_source', ['null', 'string'])
+            ->setAllowedTypes('mount_target', ['null', 'string'])
         ;
     }
 }

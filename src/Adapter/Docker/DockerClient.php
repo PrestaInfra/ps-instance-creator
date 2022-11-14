@@ -7,6 +7,7 @@ use Docker\API\Model\ContainerSummaryItem;
 use Docker\API\Model\EndpointSettings;
 use Docker\API\Model\HostConfig;
 use Docker\API\Model\ImageSummary;
+use Docker\API\Model\Mount;
 use Docker\API\Model\NetworkingConfig;
 use Docker\API\Model\PortBinding;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
@@ -121,6 +122,20 @@ class DockerClient implements DockerClientInterface
         $portMap[$dockerValuesProvider->get('exposed_port')] = $portsBinding;
         $hostConfig = new HostConfig();
         $hostConfig->setPortBindings($portMap);
+
+        if(!empty($dockerValuesProvider->get('mount_source')) &&
+            !empty($dockerValuesProvider->get('mount_target')))
+        {
+            $defaultVolume = (new Mount())
+                ->setSource($dockerValuesProvider->get('mount_source'))
+                ->setTarget($dockerValuesProvider->get('mount_target'))
+                ->setType('bind')
+                ->setConsistency('default')
+                ->setReadOnly(false)
+            ;
+
+            $hostConfig->setMounts([$defaultVolume]);
+        }
 
         $containerConfig->setHostConfig($hostConfig);
 

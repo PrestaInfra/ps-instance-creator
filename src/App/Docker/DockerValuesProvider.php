@@ -6,6 +6,8 @@ final class DockerValuesProvider
 {
     public const DEFAULT_SHOPS_NBR = 1;
     public const PS_INFRA_NETWORK_ID_ENV_VAR_NAME = 'PS_INFRA_NETWORK_ID';
+    public const PS_INFRA_MOUNT_SOURCE_PATH_ENV_VAR_NAME = 'PS_INFRA_MOUNT_SOURCE_PATH';
+    public const PS_INFRA_MOUNT_TARGET_PATH_ENV_VAR_NAME = 'PS_INFRA_MOUNT_TARGET_PATH';
 
     public function __construct(
         protected array $parameters,
@@ -79,5 +81,28 @@ final class DockerValuesProvider
     protected function network_id(): ?string
     {
         return getenv(self::PS_INFRA_NETWORK_ID_ENV_VAR_NAME);
+    }
+
+    protected function mount_source(): ?string
+    {
+        $mountSourcePath = getenv(self::PS_INFRA_MOUNT_SOURCE_PATH_ENV_VAR_NAME);
+
+        if (empty($mountSourcePath)) {
+            return null;
+        }
+
+        $projectName = $this->get('project_name');
+
+        if (!empty($projectName) && !str_ends_with($mountSourcePath, $projectName)) {
+            $mountSourcePath .= '/'.$projectName;
+            $mountSourcePath = str_replace('//', '/', $mountSourcePath);
+        }
+
+        return $mountSourcePath;
+    }
+
+    protected function mount_target(): ?string
+    {
+        return getenv(self::PS_INFRA_MOUNT_TARGET_PATH_ENV_VAR_NAME);
     }
 }
