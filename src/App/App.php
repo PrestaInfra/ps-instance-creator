@@ -2,6 +2,7 @@
 
 namespace Prestainfra\PsInstanceCreator\App;
 
+use Exception;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Form\FormHandler;
 use Prestainfra\PsInstanceCreator\App\TemplateEngine\TemplateEngineInterface;
@@ -26,7 +27,13 @@ final class App
     public function renderView(): string
     {
         if ($this->formHandler->isFormSubmit('submitForm')) {
-            $handleFormResult = $this->formHandler->handleForm($this->dockerClient);
+            try {
+                $handleFormResult = $this->formHandler->handleForm($this->dockerClient);
+            } catch (Exception $e) {
+                return $this->templateEngine->render('errors', [
+                    'messages' => [$e->getMessage()]
+                ]);
+            }
 
             return $this->templateEngine->render('container-summary', [
                 'container' => $handleFormResult

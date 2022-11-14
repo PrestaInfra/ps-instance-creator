@@ -5,6 +5,7 @@ namespace Prestainfra\PsInstanceCreator\App\Docker;
 final class DockerValuesProvider
 {
     public const DEFAULT_SHOPS_NBR = 1;
+    public const PS_INFRA_NETWORK_ID_ENV_VAR_NAME = 'PS_INFRA_NETWORK_ID';
 
     public function __construct(
         protected array $parameters,
@@ -73,5 +74,10 @@ final class DockerValuesProvider
     protected function shops_number(): int
     {
         return $this->getInt('shops_number', 1, true) ?? self::DEFAULT_SHOPS_NBR;
+    }
+
+    protected function network_id(): ?string
+    {
+        return getenv(self::PS_INFRA_NETWORK_ID_ENV_VAR_NAME);
     }
 }

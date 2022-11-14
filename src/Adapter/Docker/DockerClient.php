@@ -4,8 +4,10 @@ namespace Prestainfra\PsInstanceCreator\Adapter\Docker;
 
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\ContainerSummaryItem;
+use Docker\API\Model\EndpointSettings;
 use Docker\API\Model\HostConfig;
 use Docker\API\Model\ImageSummary;
+use Docker\API\Model\NetworkingConfig;
 use Docker\API\Model\PortBinding;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
@@ -78,6 +80,9 @@ class DockerClient implements DockerClientInterface
         return $imagesList;
     }
 
+    /**
+     * @throws Exception
+     */
     public function createPrestaShopInstance(DockerValuesProvider $dockerValuesProvider): array
     {
         $imageSummary = $this->getImageSummaryById($dockerValuesProvider->get('image_id'));
@@ -90,6 +95,16 @@ class DockerClient implements DockerClientInterface
             ->setAttachStderr($dockerValuesProvider->getBoolean('stderr'))
             ->setEnv($dockerValuesProvider->getArray('env_vars'))
         ;
+
+        if(!empty($dockerValuesProvider->get('network_id'))){
+            $networkingConfig = new NetworkingConfig();
+            $endpointSettings = new EndpointSettings();
+            $endpointSettings->setNetworkID($dockerValuesProvider->get('network_id'));
+            $networkingConfig->setEndpointsConfig([
+                $dockerValuesProvider->get('network_id') => $endpointSettings
+            ]);
+            $containerConfig->setNetworkingConfig($networkingConfig);
+        }
 
         $shopsNbr = $dockerValuesProvider->getInt('shops_number');
 
@@ -109,9 +124,13 @@ class DockerClient implements DockerClientInterface
 
         $containerConfig->setHostConfig($hostConfig);
 
-        $containerCreateResult = $this->dockerClient->containerCreate($containerConfig, [
-            'name' => $dockerValuesProvider->get('container_name')
-        ]);
+        try {
+            $containerCreateResult = $this->dockerClient->containerCreate($containerConfig, [
+                'name' => $dockerValuesProvider->get('container_name')
+            ]);
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
 
         if (!is_a($containerCreateResult, ContainersCreatePostResponse201::class)) {
             throw new Exception('Error during create container');
@@ -119,6 +138,10 @@ class DockerClient implements DockerClientInterface
 
         $this->dockerClient->containerStart($containerCreateResult->getId());
         $containerSummaryItem = $this->getContainerSummaryById($containerCreateResult->getId(), true);
+
+        if (null == $containerSummaryItem) {
+            throw new Exception('Error during create container');
+        }
 
         return (new ContainerPresenter())->present($containerSummaryItem);
     }

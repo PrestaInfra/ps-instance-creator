@@ -24,6 +24,7 @@ final class FormValidator
             'host',
             'exposed_port',
             'env_vars',
+            'network_id',
         ]);
 
         $resolver->setDefaults([
@@ -36,14 +37,19 @@ final class FormValidator
             'host' => '0.0.0.0',
             'exposed_port' => '80/tcp',
             'env_vars' => [],
+            'network_id' => null,
         ]);
 
-        $resolver->setAllowedTypes('image_id', 'string');
-        $resolver->setAllowedTypes('project_name', 'string');
-        $resolver->setAllowedTypes('ports', 'array');
-        $resolver->setAllowedTypes('shops_number', 'int');
-        $resolver->setAllowedTypes('host', 'string');
-        $resolver->setAllowedTypes('exposed_port', 'string');
-        $resolver->setAllowedTypes('env_vars', 'array');
+        $resolver
+            ->setAllowedTypes('image_id', 'string')
+            ->setAllowedTypes('project_name', 'string')
+            ->setAllowedTypes('ports', 'array')
+            ->setAllowedTypes('shops_number', 'int')
+            ->setAllowedTypes('host', 'string')
+            ->setAllowedTypes('exposed_port', 'string')
+            ->setAllowedTypes('env_vars', 'array')
+            ->setAllowedTypes('env_vars', 'array')
+            ->setAllowedTypes('network_id', ['null', 'string'])
+        ;
     }
 }
