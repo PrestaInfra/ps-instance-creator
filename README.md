@@ -1,7 +1,7 @@
 # ps-instance-creator
 Prestashop docker instance creator
 
-![image](https://user-images.githubusercontent.com/16455155/201451513-05668acb-d987-46e1-bbba-0cc072298aca.png)
+![image](https://user-images.githubusercontent.com/16455155/201567154-65599d41-6cbf-4494-bc38-f1e0144f52fa.png)
 
 # Requirements :
 
