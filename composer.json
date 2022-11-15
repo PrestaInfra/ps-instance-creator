@@ -21,5 +21,8 @@
         "twig/twig": "^2.0",
         "symfony/asset": "^6.1",
         "symfony/options-resolver": "^6.1"
+    },
+    "require-dev": {
+        "symfony/dotenv": "^6.1"
     }
 }

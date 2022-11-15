@@ -8,6 +8,7 @@ use Prestainfra\PsInstanceCreator\App\Form\FormHandler;
 use Prestainfra\PsInstanceCreator\App\TemplateEngine\TemplateEngineInterface;
 use Prestainfra\PsInstanceCreator\App\Repository\PrestaShopRepository;
 use Prestainfra\PsInstanceCreator\App\Repository\AppRepository;
+use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
 
 final class App
 {
@@ -17,7 +18,8 @@ final class App
 
     public function __construct(
         protected DockerClientInterface $dockerClient,
-        protected TemplateEngineInterface $templateEngine
+        protected TemplateEngineInterface $templateEngine,
+        protected ConfiguratorInterface $configurator
     ){
         $this->formHandler = new FormHandler();
         $this->appRepository = new AppRepository();

@@ -2,6 +2,8 @@
 
 namespace Prestainfra\PsInstanceCreator\App\Docker;
 
+use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
+
 final class DockerValuesProvider
 {
     public const DEFAULT_SHOPS_NBR = 1;
@@ -11,7 +13,8 @@ final class DockerValuesProvider
 
     public function __construct(
         protected array $parameters,
-        protected DockerClientInterface $dockerClient
+        protected DockerClientInterface $dockerClient,
+        protected ConfiguratorInterface $configurator
     ){}
 
     public function get(string $key, mixed $default = null, bool $forceFromParam = false): mixed
@@ -80,12 +83,12 @@ final class DockerValuesProvider
 
     protected function network_id(): ?string
     {
-        return getenv(self::PS_INFRA_NETWORK_ID_ENV_VAR_NAME);
+        return $this->configurator->get(self::PS_INFRA_NETWORK_ID_ENV_VAR_NAME);
     }
 
     protected function mount_source(): ?string
     {
-        $mountSourcePath = getenv(self::PS_INFRA_MOUNT_SOURCE_PATH_ENV_VAR_NAME);
+        $mountSourcePath = $this->configurator->get(self::PS_INFRA_MOUNT_SOURCE_PATH_ENV_VAR_NAME);
 
         if (empty($mountSourcePath)) {
             return null;
@@ -103,6 +106,6 @@ final class DockerValuesProvider
 
     protected function mount_target(): ?string
     {
-        return getenv(self::PS_INFRA_MOUNT_TARGET_PATH_ENV_VAR_NAME);
+        return $this->configurator->get(self::PS_INFRA_MOUNT_TARGET_PATH_ENV_VAR_NAME);
     }
 }
