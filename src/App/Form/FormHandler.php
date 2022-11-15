@@ -67,18 +67,19 @@ final class FormHandler
     {
         $envVars = [
             'IS_ADVANCED_CONTAINER='.(int) $this->isAdvancedContainer(),
+            'ENTRY_POINT_SCRIPT_REPOSITORY_URL='.$this->getFormValue('entrypoint_script_repository'),
         ];
 
         $formEnvVars = $this->getFormValue('env_vars');
 
         if (!$this->isAdvancedContainer() || empty($formEnvVars)) {
-            $envVars;
+            return $envVars;
         }
 
         $formEnvVarsList = explode(self::ENV_VARS_DELIMITER, $formEnvVars);
 
         if (empty($formEnvVarsList)) {
-            $envVars;
+            return $envVars;
         }
 
         foreach ($formEnvVarsList as $envVarLine) {

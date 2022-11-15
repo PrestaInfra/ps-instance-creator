@@ -46,10 +46,19 @@
         <label class="btn btn-sm btn-outline-secondary" for="project_type_2">Container with project</label>
     </div>
 
-    <div class="input-group is-advanced-config d-none">
-        <div class="form-floating">
-            <textarea class="form-control text-left" name="env_vars" placeholder="ENV VARS" id="app_env_vars">{% for var_name, var_value in ps_env_vars %}{{ var_name }}={{ var_value }};&#13;&#10;{% endfor %}</textarea>
-            <label for="env_vars">ENV VARS</label>
+    <div class="is-advanced-config d-none">
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="entrypoint_script_repository" name="entrypoint_script_repository" placeholder="Entrypoint script repository url" value="{{ entrypoint_repository_url }}">
+                <label for="entrypoint_script_repository">Entrypoint script repository url</label>
+            </div>
+        </div>
+        <div class="input-group">
+            <div class="form-floating">
+                <textarea class="form-control text-left" name="env_vars" placeholder="ENV VARS" id="app_env_vars">{% for var_name, var_value in ps_env_vars %}{{ var_name }}={{ var_value }};&#13;&#10;{% endfor %}</textarea>
+                <label for="env_vars">ENV VARS</label>
+            </div>
         </div>
     </div>
 {% endblock %}
