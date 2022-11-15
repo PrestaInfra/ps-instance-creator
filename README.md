@@ -22,6 +22,8 @@ NOTE : Use releases for production version. See here https://github.com/PrestaIn
 
 # Config vars
 
+See `config/parameters.yaml`
+
 | Var                            | description                     | Default                                  | Required |
 |:-------------------------------|:--------------------------------|:-----------------------------------------|:--------:|
 | `PS_INFRA_NETWORK_ID`          | Ps infra network id             | prestashop_localinfra_localinfra-network |    NO    |
