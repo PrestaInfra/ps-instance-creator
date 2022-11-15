@@ -7,7 +7,6 @@ use Docker\API\Model\ContainerSummaryItem;
 use Docker\API\Model\EndpointSettings;
 use Docker\API\Model\HostConfig;
 use Docker\API\Model\ImageSummary;
-use Docker\API\Model\Mount;
 use Docker\API\Model\NetworkingConfig;
 use Docker\API\Model\PortBinding;
 use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
