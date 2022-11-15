@@ -18,10 +18,10 @@ final class App
 
     public function __construct(
         protected DockerClientInterface $dockerClient,
-        protected TemplateEngineInterface $templateEngine,
-        protected ConfiguratorInterface $configurator
+        protected ConfiguratorInterface $configurator,
+        protected TemplateEngineInterface $templateEngine
     ){
-        $this->formHandler = new FormHandler();
+        $this->formHandler = new FormHandler($this->configurator);
         $this->appRepository = new AppRepository();
         $this->prestaShopRepository = new PrestaShopRepository();
     }

@@ -3,13 +3,17 @@
 namespace Prestainfra\PsInstanceCreator\App\Form;
 
 use Exception;
+use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
-use Prestainfra\PsInstanceCreator\App\Repository\PrestaShopRepository;
 
 final class FormHandler
 {
     public const ENV_VARS_DELIMITER = ';';
+
+    public function __construct(
+        protected ConfiguratorInterface $configurator
+    ){}
 
     public function handleForm(DockerClientInterface $dockerClient): array
     {
@@ -19,12 +23,13 @@ final class FormHandler
             $formOptions = $this->buildContainerOption();
             $formOptions = (new FormValidator())->validate($formOptions);
 
-            $dockerValuesProvider = new DockerValuesProvider($formOptions, $dockerClient);
+            $dockerValuesProvider = new DockerValuesProvider($formOptions, $dockerClient, $this->configurator);
 
             return $dockerClient->createPrestaShopInstance($dockerValuesProvider);
         } catch (Exception  $e) {
             $messages[] = $e->getMessage();
         }
+
         return $messages;
     }
 

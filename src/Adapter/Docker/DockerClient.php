@@ -10,6 +10,7 @@ use Docker\API\Model\ImageSummary;
 use Docker\API\Model\Mount;
 use Docker\API\Model\NetworkingConfig;
 use Docker\API\Model\PortBinding;
+use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerClientInterface;
 use Prestainfra\PsInstanceCreator\App\Docker\DockerValuesProvider;
 use Docker\Docker;
@@ -23,9 +24,14 @@ class DockerClient implements DockerClientInterface
     protected array $containersList = [];
     protected array $imagesList = [];
 
-    public function __construct()
+    public function __construct(protected ConfiguratorInterface $configurator)
     {
         $this->dockerClient = Docker::create();
+    }
+
+    protected function getPsTemplateImagesPrefix()
+    {
+        return $this->configurator->get('PS_TEMPLATES_IMAGES_PREFIX');
     }
 
     private function loadContainers(bool $forceLoad = false): void
@@ -48,8 +54,15 @@ class DockerClient implements DockerClientInterface
         }
 
         $dockerImages = $this->dockerClient->imageList();
+        $psTemplateImagesPrefix = $this->getPsTemplateImagesPrefix();
 
         foreach ($dockerImages as $dockerImage) {
+            $imgTagName = $dockerImage->getRepoTags()[0];
+
+            if (!empty($psTemplateImagesPrefix) && !str_starts_with($imgTagName, $psTemplateImagesPrefix)) {
+                continue;
+            }
+
             $this->imagesList[$dockerImage->getId()] = $dockerImage;
         }
     }
@@ -126,15 +139,9 @@ class DockerClient implements DockerClientInterface
         if(!empty($dockerValuesProvider->get('mount_source')) &&
             !empty($dockerValuesProvider->get('mount_target')))
         {
-            $defaultVolume = (new Mount())
-                ->setSource($dockerValuesProvider->get('mount_source'))
-                ->setTarget($dockerValuesProvider->get('mount_target'))
-                ->setType('bind')
-                ->setConsistency('default')
-                ->setReadOnly(false)
-            ;
-
-            $hostConfig->setMounts([$defaultVolume]);
+            $hostConfig->setBinds([
+                $dockerValuesProvider->get('mount_source').':'.$dockerValuesProvider->get('mount_target')
+            ]);
         }
 
         $containerConfig->setHostConfig($hostConfig);

@@ -1,0 +1,4 @@
+PS_INFRA_NETWORK_ID: prestashop_localinfra_localinfra-network
+PS_INFRA_MOUNT_SOURCE_PATH: /var/www/html
+PS_INFRA_MOUNT_TARGET_PATH: /var/www
+PS_TEMPLATES_IMAGES_PREFIX: prestashop_localinfra_template

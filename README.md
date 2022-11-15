@@ -5,17 +5,17 @@ Prestashop docker instance creator
 
 # Requirements :
 
-- yarn >= 1.22.19
-- php >= 8.1
-- docker
+- `yarn` >= 1.22.19
+- `php` >= 8.1
+- `docker`
 
 # Install
 
-- git clone https://github.com/PrestaInfra/ps-instance-creator.git
-- cd ps-instance-creator
-- composer install
-- yarn install
-- php -S localhost:9999
+- `git` clone https://github.com/PrestaInfra/ps-instance-creator.git
+- `cd` ps-instance-creator
+- `composer` install
+- `yarn` install
+- `php` -S localhost:9999
 
 
 NOTE : Use releases for production version. See here https://github.com/PrestaInfra/ps-instance-creator/releases
@@ -27,3 +27,4 @@ NOTE : Use releases for production version. See here https://github.com/PrestaIn
 | `PS_INFRA_NETWORK_ID`          | Ps infra network id             |    NO    |
 | `PS_INFRA_MOUNT_SOURCE_PATH`   | Ps infra host mount source path |    NO    |
 | `PS_INFRA_MOUNT_TARGET_PATH`   | Ps infra container mount target |    NO    |
+| `PS_TEMPLATES_IMAGES_PREFIX`   | Ps infra images template prefix |    NO    |

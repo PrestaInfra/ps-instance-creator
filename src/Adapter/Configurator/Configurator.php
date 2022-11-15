@@ -3,17 +3,23 @@
 namespace Prestainfra\PsInstanceCreator\Adapter\Configurator;
 
 use Prestainfra\PsInstanceCreator\App\Configurator\ConfiguratorInterface;
-use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Yaml\Yaml;
 
 class Configurator implements ConfiguratorInterface
 {
+    protected array $configVars;
+
     public function __construct(string $envFilePath)
     {
-        (new Dotenv())->load($envFilePath);
+        $parameters = Yaml::parseFile($envFilePath);
+
+        if (is_array($parameters)) {
+            $this->configVars = $parameters;
+        }
     }
 
     public function get(string $key): mixed
     {
-        return getenv($key);
+        return $this->configVars[$key] ?? null;
     }
 }
