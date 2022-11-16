@@ -50,7 +50,7 @@ final class App
         return [
             'ps_docker_images' => $this->dockerClient->getPrestashopImages(),
             'ps_env_vars' => $this->prestaShopRepository->getDefaultEnvVars(),
-            'entrypoint_repository_url' => $this->configurator->get('PS_ENTRY_POINT_SCRIPT_REPOSITORY_URL'),
+            'entrypoint_script_url' => $this->configurator->get('PS_ENTRY_POINT_SCRIPT_URL'),
         ];
     }
 }
