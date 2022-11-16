@@ -7,6 +7,8 @@ final class PrestaShopRepository
     public function getDefaultEnvVars(): array
     {
         return [
+            'GIT_REPOSITORY' => 'https://github.com/PrestaShop/PrestaShop.git',
+            'GIT_BRANCH' => 'develop',
             'PS_STEP' => 'all',
             'PS_LANGUAGE' => 'fr',
             'PS_ALL_LANGUAGES' => '0',
