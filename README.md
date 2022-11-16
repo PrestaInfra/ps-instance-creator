@@ -1,9 +1,10 @@
 # ps-instance-creator
 Prestashop docker instance creator
 
+## Instance creator form :
 ![image](https://user-images.githubusercontent.com/16455155/202083337-4cece137-1964-4582-aa4a-aea92a3d0eb6.png)
 
-Instance summary before creation :
+## Instance summary after creation :
 ![image](https://user-images.githubusercontent.com/16455155/202085520-25b7214f-b8e5-41cc-9bfb-c57303905dab.png)
 
 
