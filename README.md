@@ -24,12 +24,12 @@ NOTE : Use releases for production version. See here https://github.com/PrestaIn
 
 See `config/parameters.yaml`
 
-| Var                                    | description                     | Default                                                   | Required |
-|:---------------------------------------|:--------------------------------|:----------------------------------------------------------|:--------:|
-| `PS_INFRA_NETWORK_ID`                  | Ps infra network id             | prestashop_localinfra_localinfra-network                  |    NO    |
-| `PS_INFRA_MOUNT_SOURCE_PATH`           | Ps infra host mount source path | /var/www/html                                             |    NO    |
-| `PS_INFRA_MOUNT_TARGET_PATH`           | Ps infra container mount target | /var/www                                                  |    NO    |
-| `PS_TEMPLATES_IMAGES_PREFIX`           | Ps infra images template prefix | prestashop_localinfra_template                            |    NO    |
-| `PS_ENTRY_POINT_SCRIPT_REPOSITORY_URL` | Ps infra entry point script     | https://github.com/PrestaInfra/ps-auto-install-script.git |    NO    |
+| Var                           | description                     | Default                                                                                        | Required |
+|:------------------------------|:--------------------------------|:-----------------------------------------------------------------------------------------------|:--------:|
+| `PS_INFRA_NETWORK_ID`         | Ps infra network id             | prestashop_localinfra_localinfra-network                                                       |    NO    |
+| `PS_INFRA_MOUNT_SOURCE_PATH`  | Ps infra host mount source path | /var/www/html                                                                                  |    NO    |
+| `PS_INFRA_MOUNT_TARGET_PATH`  | Ps infra container mount target | /var/www                                                                                       |    NO    |
+| `PS_TEMPLATES_IMAGES_PREFIX`  | Ps infra images template prefix | prestashop_localinfra_template                                                                 |    NO    |
+| `PS_ENTRY_POINT_SCRIPT_URL`   | Ps infra entry point script     | [See here](https://raw.githubusercontent.com/PrestaInfra/ps-auto-install-script/main/setup.sh) |    NO    |
 
-NOTE : `PS_ENTRY_POINT_SCRIPT_REPOSITORY_URL` a file named setup.sh is required in repository root dir.
+NOTE : `PS_ENTRY_POINT_SCRIPT_URL` must be a shell script.
